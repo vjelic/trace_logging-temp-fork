@@ -1,0 +1,84 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Glog.AI",
+          "organization": "Glog.AI",
+          "fullName": "Glog, Making software more secure",
+          "version": "1.0.0",
+          "semanticVersion": "1.0.0",
+          "informationUri": "https://www.glog.ai",
+          "rules": [
+            {
+              "id": "glog-033933f6-2d04-4a54-9312-f50fb3d54aee",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\n\"Detected Prohibited C Function\" vulnerability in C++ refers to the use of certain C standard library functions that are known to be dangerous due to their potential to cause buffer overflows, format string vulnerabilities, or other issues. These functions are often prohibited in secure coding standards.\n\nThe `getenv` function is one such function. It is used to retrieve the value of an environment variable from the process environment. The problem with `getenv` is that it returns a pointer to a string that may be overwritten by subsequent calls to `getenv`, `setenv`, or `unsetenv`. This can lead to race conditions if the application is multithreaded.\n\n## Mitigation Advice\n\nAvoid using `getenv` in multithreaded applications. If you need to use environment variables, consider copying the values into your own buffers to avoid race conditions.\n\n## Source Code Fix Recommendation\n\nInstead of using `getenv`, you can use `secure_getenv` if it's available on your platform. `secure_getenv` behaves the same as `getenv` but returns NULL if the process is being run with elevated privileges. This can help prevent privilege escalation attacks.\n\nHere's an example of how you can use `secure_getenv`:\n\n```cpp\n#include <stdlib.h>\n\nconst char* value = secure_getenv(\"MY_VARIABLE\");\nif (value != NULL) {\n    // Use the value\n} else {\n    // Handle the error\n}\n```\n\n## Library Dependencies\n\nThe `getenv` and `secure_getenv` functions are part of the C standard library, so you don't need any additional libraries to use them.\n\n## References\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS154189"
+                ]
+              }
+            }
+          ],
+          "language": "en-US",
+          "contents": [
+            "localizedData",
+            "nonLocalizedData"
+          ],
+          "isComprehensive": false
+        }
+      },
+      "language": "en-US",
+      "results": [
+        {
+          "ruleId": "glog-033933f6-2d04-4a54-9312-f50fb3d54aee",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Banned C function detected"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/tracelogging.cpp"
+                },
+                "region": {
+                  "startLine": 51,
+                  "startColumn": 28,
+                  "endLine": 51,
+                  "endColumn": 34,
+                  "charOffset": 1796,
+                  "charLength": 6,
+                  "snippet": {
+                    "text": "getenv",
+                    "rendered": {
+                      "text": "getenv",
+                      "markdown": "`getenv`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Moderate",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.BannedFunction"
+            ]
+          }
+        }
+      ],
+      "newlineSequences": [
+        "\r\n",
+        "\n"
+      ]
+    }
+  ]
+}
